@@ -11,14 +11,14 @@
 #
 
 amqp = require 'amqp'
-uuid = require 'uuid'
+uuid = require 'uuid-js'
 events = require 'events'
 bison = require '../lib/bison'
 
 
 #### Actors library
 
-exports.VERSION = '0.0.1'
+exports.VERSION = '0.0.2'
 
 class Connection extends events.EventEmitter
     # The connection passed in is a amqp.Connection instance connected to 
@@ -97,7 +97,7 @@ class Actor extends events.EventEmitter
         #
         # Once all is ready, send!
         if callback
-            replyQueueId = uuid.generate()
+            replyQueueId = uuid.create().toString()
             replyQueue = @connection.queue(replyQueueId, ack: true)
                 .on 'open', =>
                     replyQueue.bind 'actor-replies', 'reply.'+replyQueueId
